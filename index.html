@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Analysis Report Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bookman+Old+Style&family=Times+New+Roman:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bookman Old Style', serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .report-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .report-header h1 {
+            font-size: 32pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .report-header h2 {
+            font-size: 26pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .report-header h3 {
+            font-size: 24pt;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .report-table th, .report-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            font-size: 14pt;
+        }
+        
+        .report-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .report-table td:first-child {
+            font-weight: bold;
+        }
+        
+        .test-results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .test-results-table th, .test-results-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            font-size: 14pt;
+        }
+        
+        .test-results-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .test-results-table td {
+            text-align: center;
+        }
+        
+        .test-results-table td:first-child {
+            text-align: center;
+        }
+        
+        .test-results-table td:nth-child(2) {
+            text-align: left;
+        }
+        
+        .opinion-section {
+            margin: 30px 0;
+        }
+        
+        .opinion-section h4 {
+            font-size: 18pt;
+            margin-bottom: 15px;
+        }
+        
+        .opinion-section ul {
+            list-style-type: none;
+            padding-left: 30px;
+            font-size: 16pt;
+        }
+        
+        .opinion-section ul li:before {
+            content: "▶";
+            margin-right: 10px;
+        }
+        
+        .note-section {
+            margin: 30px 0;
+            font-size: 14pt;
+        }
+        
+        .note-section span {
+            border-bottom: 1px solid #000;
+            padding: 0 5px;
+        }
+        
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 30%;
+        }
+        
+        .signature-box h4 {
+            font-size: 16pt;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-address {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14pt;
+        }
+        
+        .btn-generate {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .btn-generate:hover {
+            background-color: #0b5ed7;
+        }
+        
+        .btn-print {
+            background-color: #198754;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .btn-print:hover {
+            background-color: #157347;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .form-container {
+                display: none;
+            }
+            
+            .report-container {
+                display: block;
+                box-shadow: none;
+            }
+            
+            .no-print {
+                display: none;
+            }
+            
+            @page {
+                size: legal;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="mb-4">Food Analysis Report Generator</h2>
+            <form id="reportForm">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="sampleCode" class="form-label">Sample Code</label>
+                        <input type="text" class="form-control" id="sampleCode" value="9325FL100043P">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="submitterName" class="form-label">Name of Submitter</label>
+                        <input type="text" class="form-control" id="submitterName" value="M. WAQAS">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="article" class="form-label">Article</label>
+                        <input type="text" class="form-control" id="article" value="Red Chilli Powder (Loose)">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="sampleType" class="form-label">Sample Type</label>
+                        <input type="text" class="form-control" id="sampleType" value="Spices (Red Chilli Powder)">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="townDistrict" class="form-label">Town & District</label>
+                        <input type="text" class="form-control" id="townDistrict" value="Multan">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="totalSamples" class="form-label">Total Samples Submitted</label>
+                        <input type="text" class="form-control" id="totalSamples" value="1">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="sampleId" class="form-label">Sample ID</label>
+                        <input type="text" class="form-control" id="sampleId" value="214805">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tankNo" class="form-label">Tank No (if applicable)</label>
+                        <input type="text" class="form-control" id="tankNo" value="N/A">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="collectionDate" class="form-label">Sample Collection Date</label>
+                        <input type="text" class="form-control" id="collectionDate" value="20-10-2025">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="receivingDate" class="form-label">Sample Receiving Date</label>
+                        <input type="text" class="form-control" id="receivingDate" value="20-10-2025">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="activityDate" class="form-label">Date of Activity in Laboratory</label>
+                        <input type="text" class="form-control" id="activityDate" value="21-10-2025">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="issuanceDate" class="form-label">Certificate Issuance Date</label>
+                        <input type="text" class="form-control" id="issuanceDate" value="22-10-2025">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="vendorAddress" class="form-label">Vendor's Name & Address</label>
+                        <input type="text" class="form-control" id="vendorAddress" value="Chowk Shah Abbas, Street No. 11, Mohalla Islam Nagar, Mutan.">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="companyAddress" class="form-label">Company's Address</label>
+                        <input type="text" class="form-control" id="companyAddress" value="N/A">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Test Parameters</label>
+                    <div id="testParameters">
+                        <div class="row mb-2 parameter-row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-name" placeholder="Parameter" value="Physical Appearance">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-method" placeholder="Method" value="Pearson's (9th Edition)">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-spec" placeholder="Specification" value="Should be Characteristic">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control parameter-uom" placeholder="UOM" value="___">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="text" class="form-control parameter-result" placeholder="Result" value="Characteristic">
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-2 parameter-row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-name" placeholder="Parameter" value="Extraneous Matter">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-method" placeholder="Method" value="Pearson's (9th Edition)">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-spec" placeholder="Specification" value="Should be Free From Extraneous Matter">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control parameter-uom" placeholder="UOM" value="___">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="text" class="form-control parameter-result" placeholder="Result" value="Absent">
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-2 parameter-row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-name" placeholder="Parameter" value="Insect Fragments">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-method" placeholder="Method" value="Pearson's (9th Edition)">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control parameter-spec" placeholder="Specification" value="Should be Free From Insect Fragments">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control parameter-uom" placeholder="UOM" value="___">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="text" class="form-control parameter-result" placeholder="Result" value="Absent">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="addParameter" class="btn btn-sm btn-secondary mt-2">Add Parameter</button>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="opinion" class="form-label">Opinion</label>
+                    <textarea class="form-control" id="opinion" rows="3">The above test results of the sample are in accordance to the specifications as given in Punjab Food Authority Standards (Harmonized).</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="note" class="form-label">Note</label>
+                    <textarea class="form-control" id="note" rows="4">Sampling has not been performed by the Punjab Food Authority and Punjab Food Authority does not accept the responsibility that the item(s) supplied is/are truly representative item(s) of any batch or stock or entire production. The party shall assume full responsibility for the ethical use of the results in the test/calibration certificate and the laboratory shall be held free from any and all claims, which may result from the use of such data by the client or others. This report or contents of this report cannot be used for media campaign or legal proceedings.</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="address" class="form-label">Laboratory Address</label>
+                    <input type="text" class="form-control" id="address" value="Government Public Analyst Laboratory, Punjab Food Authority, District Jail Road, Near Circuit House Multan, Punjab, Pakistan">
+                </div>
+                
+                <div class="no-print">
+                    <button type="button" id="generateReport" class="btn btn-generate">Generate Report</button>
+                    <button type="button" id="printReport" class="btn btn-print" style="display:none;">Print Report</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="report-container" id="reportContainer">
+            <div class="report-header">
+                <h1>Punjab Food Authority</h1>
+                <h2>GOVERNMENT OF THE PUNJAB</h2>
+                <h3>(PRIVATE SAMPLE)</h3>
+            </div>
+            
+            <table class="report-table">
+                <tbody>
+                    <tr>
+                        <td width="15%">Sample Code</td>
+                        <td width="20%" id="reportSampleCode">-</td>
+                        <td width="15%">Name of Submitter</td>
+                        <td width="20%" id="reportSubmitterName">-</td>
+                        <td width="15%">Sample Collection Date</td>
+                        <td width="15%" id="reportCollectionDate">-</td>
+                    </tr>
+                    <tr>
+                        <td>Article</td>
+                        <td id="reportArticle">-</td>
+                        <td>Sample Type</td>
+                        <td id="reportSampleType">-</td>
+                        <td>Sample Receiving Date</td>
+                        <td id="reportReceivingDate">-</td>
+                    </tr>
+                    <tr>
+                        <td>Town & District</td>
+                        <td id="reportTownDistrict">-</td>
+                        <td>Total Samples Submitted</td>
+                        <td id="reportTotalSamples">-</td>
+                        <td>Date of Activity in Laboratory</td>
+                        <td id="reportActivityDate">-</td>
+                    </tr>
+                    <tr>
+                        <td>Sample ID</td>
+                        <td id="reportSampleId">-</td>
+                        <td>Tank No (if applicable)</td>
+                        <td id="reportTankNo">-</td>
+                        <td>Certificate Issuance Date</td>
+                        <td id="reportIssuanceDate">-</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Vendor's Name & Address</td>
+                        <td colspan="4" id="reportVendorAddress">-</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Company's Address</td>
+                        <td colspan="4" id="reportCompanyAddress">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 class="text-center mb-4">Test Results</h3>
+            
+            <table class="test-results-table">
+                <thead>
+                    <tr>
+                        <th width="5%">Sr. No.</th>
+                        <th width="25%">Test Parameters</th>
+                        <th width="20%">Method / Principle</th>
+                        <th width="30%">Specifications</th>
+                        <th width="5%">UOM</th>
+                        <th width="15%">Results</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTestParameters">
+                    <!-- Test parameters will be inserted here -->
+                </tbody>
+            </table>
+            
+            <div class="opinion-section">
+                <h4>Analyzed By: _______________________</h4>
+                <p>Opinion from Government Public Analyst, Punjab Food Authority: -</p>
+                <ul>
+                    <li id="reportOpinion">-</li>
+                </ul>
+            </div>
+            
+            <div class="note-section">
+                <p><span>Note:</span> <span id="reportNote">-</span></p>
+            </div>
+            
+            <div class="signature-section">
+                <div class="signature-box">
+                    <h4>Assistant Public Analyst (Category I)<br>Punjab Food Authority</h4>
+                </div>
+                <div class="signature-box">
+                    <h4>Government Public Analyst<br>Punjab Food Authority</h4>
+                </div>
+                <div class="signature-box">
+                    <img src="https://via.placeholder.com/150x50" alt="Stamp" class="img-fluid">
+                </div>
+            </div>
+            
+            <div class="footer-address">
+                <p id="reportAddress">-</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('addParameter').addEventListener('click', function() {
+            const container = document.getElementById('testParameters');
+            const newRow = document.createElement('div');
+            newRow.className = 'row mb-2 parameter-row';
+            newRow.innerHTML = `
+                <div class="col-md-3">
+                    <input type="text" class="form-control parameter-name" placeholder="Parameter">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control parameter-method" placeholder="Method">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control parameter-spec" placeholder="Specification">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control parameter-uom" placeholder="UOM">
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control parameter-result" placeholder="Result">
+                </div>
+            `;
+            container.appendChild(newRow);
+        });
+        
+        document.getElementById('generateReport').addEventListener('click', function() {
+            // Get form values
+            const sampleCode = document.getElementById('sampleCode').value;
+            const submitterName = document.getElementById('submitterName').value;
+            const article = document.getElementById('article').value;
+            const sampleType = document.getElementById('sampleType').value;
+            const townDistrict = document.getElementById('townDistrict').value;
+            const totalSamples = document.getElementById('totalSamples').value;
+            const sampleId = document.getElementById('sampleId').value;
+            const tankNo = document.getElementById('tankNo').value;
+            const collectionDate = document.getElementById('collectionDate').value;
+            const receivingDate = document.getElementById('receivingDate').value;
+            const activityDate = document.getElementById('activityDate').value;
+            const issuanceDate = document.getElementById('issuanceDate').value;
+            const vendorAddress = document.getElementById('vendorAddress').value;
+            const companyAddress = document.getElementById('companyAddress').value;
+            const opinion = document.getElementById('opinion').value;
+            const note = document.getElementById('note').value;
+            const address = document.getElementById('address').value;
+            
+            // Update report with form values
+            document.getElementById('reportSampleCode').textContent = sampleCode;
+            document.getElementById('reportSubmitterName').textContent = submitterName;
+            document.getElementById('reportArticle').textContent = article;
+            document.getElementById('reportSampleType').textContent = sampleType;
+            document.getElementById('reportTownDistrict').textContent = townDistrict;
+            document.getElementById('reportTotalSamples').textContent = totalSamples;
+            document.getElementById('reportSampleId').textContent = sampleId;
+            document.getElementById('reportTankNo').textContent = tankNo;
+            document.getElementById('reportCollectionDate').textContent = collectionDate;
+            document.getElementById('reportReceivingDate').textContent = receivingDate;
+            document.getElementById('reportActivityDate').textContent = activityDate;
+            document.getElementById('reportIssuanceDate').textContent = issuanceDate;
+            document.getElementById('reportVendorAddress').textContent = vendorAddress;
+            document.getElementById('reportCompanyAddress').textContent = companyAddress;
+            document.getElementById('reportOpinion').textContent = opinion;
+            document.getElementById('reportNote').textContent = note;
+            document.getElementById('reportAddress').textContent = address;
+            
+            // Update test parameters table
+            const parametersContainer = document.getElementById('reportTestParameters');
+            parametersContainer.innerHTML = '';
+            
+            const parameterRows = document.querySelectorAll('.parameter-row');
+            parameterRows.forEach((row, index) => {
+                const name = row.querySelector('.parameter-name').value;
+                const method = row.querySelector('.parameter-method').value;
+                const spec = row.querySelector('.parameter-spec').value;
+                const uom = row.querySelector('.parameter-uom').value;
+                const result = row.querySelector('.parameter-result').value;
+                
+                if (name || method || spec || uom || result) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}.</td>
+                        <td style="text-align: left;"><strong>${name}</strong></td>
+                        <td><strong>${method}</strong></td>
+                        <td><strong>${spec}</strong></td>
+                        <td><strong>${uom}</strong></td>
+                        <td><strong>${result}</strong></td>
+                    `;
+                    parametersContainer.appendChild(tr);
+                }
+            });
+            
+            // Show report and print button
+            document.getElementById('reportContainer').style.display = 'block';
+            document.getElementById('printReport').style.display = 'inline-block';
+        });
+        
+        document.getElementById('printReport').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html>
