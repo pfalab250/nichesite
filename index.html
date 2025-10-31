@@ -3,581 +3,2133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Analysis Report Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bookman+Old+Style&family=Times+New+Roman:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Lab Sample Management System - Admin Panel</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1e293b;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
         body {
-            font-family: 'Bookman Old Style', serif;
-            background-color: #f8f9fa;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-color);
+            line-height: 1.6;
         }
-        
-        .form-container {
+
+        /* Header Styles */
+        header {
             background-color: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        
-        .report-container {
-            background-color: white;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            display: none;
-        }
-        
-        .report-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .report-header h1 {
-            font-size: 32pt;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .report-header h2 {
-            font-size: 26pt;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .report-header h3 {
-            font-size: 24pt;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        
-        .report-table th, .report-table td {
-            border: 1px solid #000;
-            padding: 8px;
-            font-size: 14pt;
-        }
-        
-        .report-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        
-        .report-table td:first-child {
-            font-weight: bold;
-        }
-        
-        .test-results-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        
-        .test-results-table th, .test-results-table td {
-            border: 1px solid #000;
-            padding: 8px;
-            font-size: 14pt;
-        }
-        
-        .test-results-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        .test-results-table td {
-            text-align: center;
-        }
-        
-        .test-results-table td:first-child {
-            text-align: center;
-        }
-        
-        .test-results-table td:nth-child(2) {
-            text-align: left;
-        }
-        
-        .opinion-section {
-            margin: 30px 0;
-        }
-        
-        .opinion-section h4 {
-            font-size: 18pt;
-            margin-bottom: 15px;
-        }
-        
-        .opinion-section ul {
-            list-style-type: none;
-            padding-left: 30px;
-            font-size: 16pt;
-        }
-        
-        .opinion-section ul li:before {
-            content: "▶";
-            margin-right: 10px;
-        }
-        
-        .note-section {
-            margin: 30px 0;
-            font-size: 14pt;
-        }
-        
-        .note-section span {
-            border-bottom: 1px solid #000;
-            padding: 0 5px;
-        }
-        
-        .signature-section {
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
-            margin-top: 50px;
+            align-items: center;
         }
-        
-        .signature-box {
-            text-align: center;
-            width: 30%;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        
-        .signature-box h4 {
-            font-size: 16pt;
-            border-bottom: 1px solid #000;
-            padding-bottom: 5px;
-            margin-bottom: 30px;
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary-color);
         }
-        
-        .footer-address {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 14pt;
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--dark-color);
         }
-        
-        .btn-generate {
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+        }
+
+        .nav-tabs ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-tabs li {
+            padding: 1rem 0;
             cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
         }
-        
-        .btn-generate:hover {
-            background-color: #0b5ed7;
+
+        .nav-tabs li:hover {
+            color: var(--primary-color);
         }
-        
-        .btn-print {
-            background-color: #198754;
+
+        .nav-tabs li.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-card-icon.primary {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .stat-card-icon.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .stat-card-icon.warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stat-card-icon.danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card-label {
+            color: var(--secondary-color);
+            font-size: 0.875rem;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            font-size: 1.125rem;
+        }
+
+        .summary-list {
+            list-style: none;
+        }
+
+        .summary-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-list li:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--secondary-color);
+            font-size: 0.875rem;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        /* Admin Panel Styles */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .admin-card-header {
+            background-color: var(--primary-color);
             color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-card-header h3 {
+            font-size: 1.125rem;
+        }
+
+        .admin-card-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h4 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            font-size: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .list-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .list-header h4 {
+            font-size: 1rem;
+            color: var(--dark-color);
+        }
+
+        .item-list {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .item-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .item-list li:last-child {
+            border-bottom: none;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            background: none;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
+            color: var(--secondary-color);
             cursor: pointer;
-            margin-left: 10px;
+            padding: 0.25rem;
+            transition: color 0.2s ease;
         }
-        
-        .btn-print:hover {
-            background-color: #157347;
+
+        .btn-icon:hover {
+            color: var(--danger-color);
         }
-        
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Table Section */
+        .table-section {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: #f8fafc;
+            z-index: 10;
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #f1f5f9;
+        }
+
+        th i {
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .status-badge.info {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        /* Pagination */
+        .pagination {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination-controls button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pagination-controls button:hover:not(:disabled) {
+            background-color: var(--light-bg);
+        }
+
+        .pagination-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-controls button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--dark-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--light-bg);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            color: var(--dark-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--dark-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 0.875rem;
+            color: var(--dark-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 1rem;
             }
-            
-            .form-container {
-                display: none;
+
+            .container {
+                padding: 1rem;
             }
-            
-            .report-container {
-                display: block;
-                box-shadow: none;
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
-            
-            .no-print {
-                display: none;
+
+            .summary-grid {
+                grid-template-columns: 1fr;
             }
-            
-            @page {
-                size: legal;
-                margin: 0;
+
+            .admin-grid {
+                grid-template-columns: 1fr;
             }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success-color);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--danger-color);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--primary-color);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="form-container">
-            <h2 class="mb-4">Food Analysis Report Generator</h2>
-            <form id="reportForm">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="sampleCode" class="form-label">Sample Code</label>
-                        <input type="text" class="form-control" id="sampleCode" value="9325FL100043P">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="submitterName" class="form-label">Name of Submitter</label>
-                        <input type="text" class="form-control" id="submitterName" value="M. WAQAS">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="article" class="form-label">Article</label>
-                        <input type="text" class="form-control" id="article" value="Red Chilli Powder (Loose)">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="sampleType" class="form-label">Sample Type</label>
-                        <input type="text" class="form-control" id="sampleType" value="Spices (Red Chilli Powder)">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="townDistrict" class="form-label">Town & District</label>
-                        <input type="text" class="form-control" id="townDistrict" value="Multan">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="totalSamples" class="form-label">Total Samples Submitted</label>
-                        <input type="text" class="form-control" id="totalSamples" value="1">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="sampleId" class="form-label">Sample ID</label>
-                        <input type="text" class="form-control" id="sampleId" value="214805">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="tankNo" class="form-label">Tank No (if applicable)</label>
-                        <input type="text" class="form-control" id="tankNo" value="N/A">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="collectionDate" class="form-label">Sample Collection Date</label>
-                        <input type="text" class="form-control" id="collectionDate" value="20-10-2025">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="receivingDate" class="form-label">Sample Receiving Date</label>
-                        <input type="text" class="form-control" id="receivingDate" value="20-10-2025">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="activityDate" class="form-label">Date of Activity in Laboratory</label>
-                        <input type="text" class="form-control" id="activityDate" value="21-10-2025">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="issuanceDate" class="form-label">Certificate Issuance Date</label>
-                        <input type="text" class="form-control" id="issuanceDate" value="22-10-2025">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <label for="vendorAddress" class="form-label">Vendor's Name & Address</label>
-                        <input type="text" class="form-control" id="vendorAddress" value="Chowk Shah Abbas, Street No. 11, Mohalla Islam Nagar, Mutan.">
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <label for="companyAddress" class="form-label">Company's Address</label>
-                        <input type="text" class="form-control" id="companyAddress" value="N/A">
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Test Parameters</label>
-                    <div id="testParameters">
-                        <div class="row mb-2 parameter-row">
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-name" placeholder="Parameter" value="Physical Appearance">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-method" placeholder="Method" value="Pearson's (9th Edition)">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-spec" placeholder="Specification" value="Should be Characteristic">
-                            </div>
-                            <div class="col-md-2">
-                                <input type="text" class="form-control parameter-uom" placeholder="UOM" value="___">
-                            </div>
-                            <div class="col-md-1">
-                                <input type="text" class="form-control parameter-result" placeholder="Result" value="Characteristic">
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-2 parameter-row">
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-name" placeholder="Parameter" value="Extraneous Matter">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-method" placeholder="Method" value="Pearson's (9th Edition)">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-spec" placeholder="Specification" value="Should be Free From Extraneous Matter">
-                            </div>
-                            <div class="col-md-2">
-                                <input type="text" class="form-control parameter-uom" placeholder="UOM" value="___">
-                            </div>
-                            <div class="col-md-1">
-                                <input type="text" class="form-control parameter-result" placeholder="Result" value="Absent">
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-2 parameter-row">
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-name" placeholder="Parameter" value="Insect Fragments">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-method" placeholder="Method" value="Pearson's (9th Edition)">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control parameter-spec" placeholder="Specification" value="Should be Free From Insect Fragments">
-                            </div>
-                            <div class="col-md-2">
-                                <input type="text" class="form-control parameter-uom" placeholder="UOM" value="___">
-                            </div>
-                            <div class="col-md-1">
-                                <input type="text" class="form-control parameter-result" placeholder="Result" value="Absent">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" id="addParameter" class="btn btn-sm btn-secondary mt-2">Add Parameter</button>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="opinion" class="form-label">Opinion</label>
-                    <textarea class="form-control" id="opinion" rows="3">The above test results of the sample are in accordance to the specifications as given in Punjab Food Authority Standards (Harmonized).</textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="note" class="form-label">Note</label>
-                    <textarea class="form-control" id="note" rows="4">Sampling has not been performed by the Punjab Food Authority and Punjab Food Authority does not accept the responsibility that the item(s) supplied is/are truly representative item(s) of any batch or stock or entire production. The party shall assume full responsibility for the ethical use of the results in the test/calibration certificate and the laboratory shall be held free from any and all claims, which may result from the use of such data by the client or others. This report or contents of this report cannot be used for media campaign or legal proceedings.</textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="address" class="form-label">Laboratory Address</label>
-                    <input type="text" class="form-control" id="address" value="Government Public Analyst Laboratory, Punjab Food Authority, District Jail Road, Near Circuit House Multan, Punjab, Pakistan">
-                </div>
-                
-                <div class="no-print">
-                    <button type="button" id="generateReport" class="btn btn-generate">Generate Report</button>
-                    <button type="button" id="printReport" class="btn btn-print" style="display:none;">Print Report</button>
-                </div>
-            </form>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h1>Lab Sample Management System</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="exportData()">
+                    <i class="fas fa-download"></i>
+                    Export
+                </button>
+                <button class="btn btn-primary" onclick="switchTab('admin')">
+                    <i class="fas fa-cog"></i>
+                    Admin Panel
+                </button>
+            </div>
         </div>
-        
-        <div class="report-container" id="reportContainer">
-            <div class="report-header">
-                <h1>Punjab Food Authority</h1>
-                <h2>GOVERNMENT OF THE PUNJAB</h2>
-                <h3>(PRIVATE SAMPLE)</h3>
-            </div>
-            
-            <table class="report-table">
-                <tbody>
-                    <tr>
-                        <td width="15%">Sample Code</td>
-                        <td width="20%" id="reportSampleCode">-</td>
-                        <td width="15%">Name of Submitter</td>
-                        <td width="20%" id="reportSubmitterName">-</td>
-                        <td width="15%">Sample Collection Date</td>
-                        <td width="15%" id="reportCollectionDate">-</td>
-                    </tr>
-                    <tr>
-                        <td>Article</td>
-                        <td id="reportArticle">-</td>
-                        <td>Sample Type</td>
-                        <td id="reportSampleType">-</td>
-                        <td>Sample Receiving Date</td>
-                        <td id="reportReceivingDate">-</td>
-                    </tr>
-                    <tr>
-                        <td>Town & District</td>
-                        <td id="reportTownDistrict">-</td>
-                        <td>Total Samples Submitted</td>
-                        <td id="reportTotalSamples">-</td>
-                        <td>Date of Activity in Laboratory</td>
-                        <td id="reportActivityDate">-</td>
-                    </tr>
-                    <tr>
-                        <td>Sample ID</td>
-                        <td id="reportSampleId">-</td>
-                        <td>Tank No (if applicable)</td>
-                        <td id="reportTankNo">-</td>
-                        <td>Certificate Issuance Date</td>
-                        <td id="reportIssuanceDate">-</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Vendor's Name & Address</td>
-                        <td colspan="4" id="reportVendorAddress">-</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Company's Address</td>
-                        <td colspan="4" id="reportCompanyAddress">-</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <h3 class="text-center mb-4">Test Results</h3>
-            
-            <table class="test-results-table">
-                <thead>
-                    <tr>
-                        <th width="5%">Sr. No.</th>
-                        <th width="25%">Test Parameters</th>
-                        <th width="20%">Method / Principle</th>
-                        <th width="30%">Specifications</th>
-                        <th width="5%">UOM</th>
-                        <th width="15%">Results</th>
-                    </tr>
-                </thead>
-                <tbody id="reportTestParameters">
-                    <!-- Test parameters will be inserted here -->
-                </tbody>
-            </table>
-            
-            <div class="opinion-section">
-                <h4>Analyzed By: _______________________</h4>
-                <p>Opinion from Government Public Analyst, Punjab Food Authority: -</p>
-                <ul>
-                    <li id="reportOpinion">-</li>
-                </ul>
-            </div>
-            
-            <div class="note-section">
-                <p><span>Note:</span> <span id="reportNote">-</span></p>
-            </div>
-            
-            <div class="signature-section">
-                <div class="signature-box">
-                    <h4>Assistant Public Analyst (Category I)<br>Punjab Food Authority</h4>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <ul>
+            <li class="active" onclick="switchTab('dashboard')">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </li>
+            <li onclick="switchTab('samples')">
+                <i class="fas fa-vial"></i> Samples
+            </li>
+            <li onclick="switchTab('reports')">
+                <i class="fas fa-file-alt"></i> Reports
+            </li>
+            <li onclick="switchTab('admin')">
+                <i class="fas fa-cog"></i> Admin
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view">
+            <!-- Statistics Cards -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div>
+                            <div class="stat-card-value" id="total-samples">0</div>
+                            <div class="stat-card-label">Total Samples</div>
+                        </div>
+                        <div class="stat-card-icon primary">
+                            <i class="fas fa-vials"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="signature-box">
-                    <h4>Government Public Analyst<br>Punjab Food Authority</h4>
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div>
+                            <div class="stat-card-value" id="pending-tests">0</div>
+                            <div class="stat-card-label">Pending Tests</div>
+                        </div>
+                        <div class="stat-card-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="signature-box">
-                    <img src="https://via.placeholder.com/150x50" alt="Stamp" class="img-fluid">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div>
+                            <div class="stat-card-value" id="completed-tests">0</div>
+                            <div class="stat-card-label">Completed Tests</div>
+                        </div>
+                        <div class="stat-card-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div>
+                            <div class="stat-card-value" id="failure-rate">0%</div>
+                            <div class="stat-card-label">Failure Rate</div>
+                        </div>
+                        <div class="stat-card-icon danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="footer-address">
-                <p id="reportAddress">-</p>
+
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Top Categories</h3>
+                    <ul class="summary-list" id="top-categories">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+                <div class="summary-card">
+                    <h3>District Distribution</h3>
+                    <ul class="summary-list" id="district-distribution">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+                <div class="summary-card">
+                    <h3>Recent Activity</h3>
+                    <ul class="summary-list" id="recent-activity">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Samples View -->
+        <div id="samples-view" class="view" style="display: none;">
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-header">
+                    <h2>Filter Samples</h2>
+                    <button class="btn btn-outline" onclick="resetFilters()">
+                        <i class="fas fa-undo"></i>
+                        Reset Filters
+                    </button>
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>District</label>
+                        <select id="filter-district" onchange="applyFilters()">
+                            <option value="">All Districts</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <select id="filter-category" onchange="applyFilters()">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Branded/Non-Branded</label>
+                        <select id="filter-branded" onchange="applyFilters()">
+                            <option value="">All</option>
+                            <option value="Branded">Branded</option>
+                            <option value="Non Branded">Non Branded</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sample Type</label>
+                        <select id="filter-type" onchange="applyFilters()">
+                            <option value="">All Types</option>
+                            <option value="Loose">Loose</option>
+                            <option value="Pre-Packed">Pre-Packed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sample Drawn Date From</label>
+                        <input type="date" id="filter-date-from" onchange="applyFilters()">
+                    </div>
+                    <div class="filter-group">
+                        <label>Sample Drawn Date To</label>
+                        <input type="date" id="filter-date-to" onchange="applyFilters()">
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary" onclick="applyFilters()">
+                        <i class="fas fa-filter"></i>
+                        Apply Filters
+                    </button>
+                    <button class="btn btn-outline" onclick="exportFilteredData()">
+                        <i class="fas fa-file-export"></i>
+                        Export Filtered
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2>Sample Records</h2>
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Search samples..." onkeyup="searchSamples()">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="samples-table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Sr <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(1)">Sample ID <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(2)">Article <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(3)">Category <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(4)">Weight & Description <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(5)">Premises <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(6)">Sample Drawn Date <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(7)">District <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(8)">FSO/AFSO <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(9)">Type <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(10)">Branded <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(11)">Sample Type <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(12)">Receiving Date <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(13)">Final Results <i class="fas fa-sort"></i></th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="samples-tbody">
+                            <!-- Sample data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <div class="pagination-info" id="pagination-info">
+                        Showing 0 of 0 entries
+                    </div>
+                    <div class="pagination-controls" id="pagination-controls">
+                        <!-- Pagination buttons will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports View -->
+        <div id="reports-view" class="view" style="display: none;">
+            <div class="summary-card">
+                <h2>Generate Reports</h2>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Report Type</label>
+                        <select id="report-type">
+                            <option value="summary">Summary Report</option>
+                            <option value="detailed">Detailed Report</option>
+                            <option value="failure">Failure Analysis</option>
+                            <option value="compliance">Compliance Report</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Date Range</label>
+                        <select id="report-range">
+                            <option value="week">Last Week</option>
+                            <option value="month">Last Month</option>
+                            <option value="quarter">Last Quarter</option>
+                            <option value="year">Last Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Format</label>
+                        <select id="report-format">
+                            <option value="pdf">PDF</option>
+                            <option value="excel">Excel</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-file-alt"></i>
+                        Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" class="view" style="display: none;">
+            <div class="admin-grid">
+                <!-- Add Sample Card -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-plus-circle"></i> Add New Sample</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <form id="add-sample-form" onsubmit="addSample(event)">
+                            <!-- Basic Information -->
+                            <div class="form-section">
+                                <h4>Basic Information</h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Article</label>
+                                        <input type="text" id="sample-article" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select id="sample-category" required>
+                                            <option value="">Select Category</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Weight and Description of Product</label>
+                                        <input type="text" id="sample-weight-description" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Premises Name & Address</label>
+                                        <input type="text" id="sample-premises" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sample Details -->
+                            <div class="form-section">
+                                <h4>Sample Details</h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Sample Drawn Date</label>
+                                        <input type="date" id="sample-drawn-date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>District</label>
+                                        <select id="sample-district" required>
+                                            <option value="">Select District</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>FSO/AFSO Name</label>
+                                        <input type="text" id="sample-fso" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sample Type</label>
+                                        <select id="sample-sample-type" required>
+                                            <option value="">Select Type</option>
+                                            <option value="Routine">Routine</option>
+                                            <option value="EPO">EPO</option>
+                                            <option value="F.I.R">F.I.R</option>
+                                            <option value="Complaint">Complaint</option>
+                                            <option value="Urgent">Urgent</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Remarks (If Any)</label>
+                                        <textarea id="sample-remarks"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Information -->
+                            <div class="form-section">
+                                <h4>Product Information</h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Branded/Non Branded</label>
+                                        <select id="sample-branded" required>
+                                            <option value="">Select</option>
+                                            <option value="Branded">Branded</option>
+                                            <option value="Non Branded">Non Branded</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Loose/Pre-Packed</label>
+                                        <select id="sample-packaging" required>
+                                            <option value="">Select</option>
+                                            <option value="Loose">Loose</option>
+                                            <option value="Pre-Packed">Pre-Packed</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Manufacturing Date</label>
+                                        <input type="date" id="sample-manufacturing-date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Expiry Date</label>
+                                        <input type="date" id="sample-expiry-date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Batch No.</label>
+                                        <input type="text" id="sample-batch">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Weight</label>
+                                        <input type="text" id="sample-weight">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ingredients</label>
+                                        <textarea id="sample-ingredients"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Manufacturing Address</label>
+                                        <input type="text" id="sample-manufacturing-address">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lab Information -->
+                            <div class="form-section">
+                                <h4>Lab Information</h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Name of the person giving sample</label>
+                                        <input type="text" id="sample-person" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Receiving Date in Lab</label>
+                                        <input type="date" id="sample-receiving-date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Time of Receiving in Lab</label>
+                                        <input type="time" id="sample-receiving-time" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Security Paper No.</label>
+                                        <input type="text" id="sample-security-paper">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tests Performed</label>
+                                        <input type="text" id="sample-tests-performed" value="Pending">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sent to DFL for Micro</label>
+                                        <select id="sample-sent-dfl">
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Micro Results</label>
+                                        <input type="text" id="sample-micro-results" value="Pending" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Final Results</label>
+                                        <select id="sample-final-results">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Pass">Pass</option>
+                                            <option value="Fail">Fail</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Opinion</label>
+                                        <input type="text" id="sample-opinion" value="Under review" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Failure Category / Safety/Quality</label>
+                                        <select id="sample-failure-category">
+                                            <option value="">Select if applicable</option>
+                                            <option value="Safety">Safety</option>
+                                            <option value="Quality">Quality</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Date of Issuance of Certificate</label>
+                                        <input type="date" id="sample-issuance-date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Report Generated</label>
+                                        <select id="sample-report-generated">
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Report Dispatched to DFL</label>
+                                        <select id="sample-report-dispatched">
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Add Sample
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Manage Districts Card -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-map-marker-alt"></i> Manage Districts</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <form id="add-district-form" onsubmit="addDistrict(event)">
+                            <div class="form-group">
+                                <label>District Name</label>
+                                <input type="text" id="district-name" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add District
+                            </button>
+                        </form>
+                        
+                        <div class="list-section">
+                            <div class="list-header">
+                                <h4>Existing Districts</h4>
+                                <span id="district-count">0 districts</span>
+                            </div>
+                            <ul class="item-list" id="districts-list">
+                                <!-- Districts will be populated here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage Categories Card -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-tags"></i> Manage Categories</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <form id="add-category-form" onsubmit="addCategory(event)">
+                            <div class="form-group">
+                                <label>Category Name</label>
+                                <input type="text" id="category-name" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Category
+                            </button>
+                        </form>
+                        
+                        <div class="list-section">
+                            <div class="list-header">
+                                <h4>Existing Categories</h4>
+                                <span id="category-count">0 categories</span>
+                            </div>
+                            <ul class="item-list" id="categories-list">
+                                <!-- Categories will be populated here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Sample Detail Modal -->
+    <div id="sample-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sample Details</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Sample details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="toast-icon"></i>
+        <div class="toast-message"></div>
+    </div>
+
     <script>
-        document.getElementById('addParameter').addEventListener('click', function() {
-            const container = document.getElementById('testParameters');
-            const newRow = document.createElement('div');
-            newRow.className = 'row mb-2 parameter-row';
-            newRow.innerHTML = `
-                <div class="col-md-3">
-                    <input type="text" class="form-control parameter-name" placeholder="Parameter">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control parameter-method" placeholder="Method">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control parameter-spec" placeholder="Specification">
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control parameter-uom" placeholder="UOM">
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="form-control parameter-result" placeholder="Result">
-                </div>
-            `;
-            container.appendChild(newRow);
-        });
-        
-        document.getElementById('generateReport').addEventListener('click', function() {
-            // Get form values
-            const sampleCode = document.getElementById('sampleCode').value;
-            const submitterName = document.getElementById('submitterName').value;
-            const article = document.getElementById('article').value;
-            const sampleType = document.getElementById('sampleType').value;
-            const townDistrict = document.getElementById('townDistrict').value;
-            const totalSamples = document.getElementById('totalSamples').value;
-            const sampleId = document.getElementById('sampleId').value;
-            const tankNo = document.getElementById('tankNo').value;
-            const collectionDate = document.getElementById('collectionDate').value;
-            const receivingDate = document.getElementById('receivingDate').value;
-            const activityDate = document.getElementById('activityDate').value;
-            const issuanceDate = document.getElementById('issuanceDate').value;
-            const vendorAddress = document.getElementById('vendorAddress').value;
-            const companyAddress = document.getElementById('companyAddress').value;
-            const opinion = document.getElementById('opinion').value;
-            const note = document.getElementById('note').value;
-            const address = document.getElementById('address').value;
-            
-            // Update report with form values
-            document.getElementById('reportSampleCode').textContent = sampleCode;
-            document.getElementById('reportSubmitterName').textContent = submitterName;
-            document.getElementById('reportArticle').textContent = article;
-            document.getElementById('reportSampleType').textContent = sampleType;
-            document.getElementById('reportTownDistrict').textContent = townDistrict;
-            document.getElementById('reportTotalSamples').textContent = totalSamples;
-            document.getElementById('reportSampleId').textContent = sampleId;
-            document.getElementById('reportTankNo').textContent = tankNo;
-            document.getElementById('reportCollectionDate').textContent = collectionDate;
-            document.getElementById('reportReceivingDate').textContent = receivingDate;
-            document.getElementById('reportActivityDate').textContent = activityDate;
-            document.getElementById('reportIssuanceDate').textContent = issuanceDate;
-            document.getElementById('reportVendorAddress').textContent = vendorAddress;
-            document.getElementById('reportCompanyAddress').textContent = companyAddress;
-            document.getElementById('reportOpinion').textContent = opinion;
-            document.getElementById('reportNote').textContent = note;
-            document.getElementById('reportAddress').textContent = address;
-            
-            // Update test parameters table
-            const parametersContainer = document.getElementById('reportTestParameters');
-            parametersContainer.innerHTML = '';
-            
-            const parameterRows = document.querySelectorAll('.parameter-row');
-            parameterRows.forEach((row, index) => {
-                const name = row.querySelector('.parameter-name').value;
-                const method = row.querySelector('.parameter-method').value;
-                const spec = row.querySelector('.parameter-spec').value;
-                const uom = row.querySelector('.parameter-uom').value;
-                const result = row.querySelector('.parameter-result').value;
+        // Data storage
+        let districts = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Pune', 'Hyderabad', 'Ahmedabad'];
+        let categories = ['Food', 'Beverages', 'Dairy', 'Bakery', 'Meat', 'Snacks', 'Spices', 'Oils'];
+        let fsoNames = ['Dr. Sharma', 'Mr. Patel', 'Ms. Reddy', 'Dr. Kumar', 'Mr. Singh'];
+        let sampleTypes = ['Routine', 'EPO', 'F.I.R', 'Complaint', 'Urgent'];
+        let finalResults = ['Pass', 'Fail', 'Pending'];
+        let failureCategories = ['Safety', 'Quality', 'Labeling', 'Composition'];
+
+        let samples = [];
+        let filteredSamples = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let sortColumn = -1;
+        let sortDirection = 'asc';
+
+        // Generate sample data
+        function generateSampleData() {
+            samples = [];
+            for (let i = 1; i <= 50; i++) {
+                const sampleDrawnDate = new Date();
+                sampleDrawnDate.setDate(sampleDrawnDate.getDate() - Math.floor(Math.random() * 365));
                 
-                if (name || method || spec || uom || result) {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${index + 1}.</td>
-                        <td style="text-align: left;"><strong>${name}</strong></td>
-                        <td><strong>${method}</strong></td>
-                        <td><strong>${spec}</strong></td>
-                        <td><strong>${uom}</strong></td>
-                        <td><strong>${result}</strong></td>
-                    `;
-                    parametersContainer.appendChild(tr);
-                }
+                const receivingDate = new Date(sampleDrawnDate);
+                receivingDate.setDate(receivingDate.getDate() + Math.floor(Math.random() * 7));
+                
+                const manufacturingDate = new Date(sampleDrawnDate);
+                manufacturingDate.setDate(manufacturingDate.getDate() - Math.floor(Math.random() * 90));
+                
+                const expiryDate = new Date(sampleDrawnDate);
+                expiryDate.setDate(expiryDate.getDate() + Math.floor(Math.random() * 365) + 30);
+
+                const finalResult = finalResults[Math.floor(Math.random() * finalResults.length)];
+                const isBranded = Math.random() > 0.3;
+                const isPrePacked = Math.random() > 0.4;
+
+                samples.push({
+                    sr: i,
+                    sampleId: `SMP-${String(i).padStart(5, '0')}`,
+                    article: `Product ${i}`,
+                    category: categories[Math.floor(Math.random() * categories.length)],
+                    weightDescription: `${Math.floor(Math.random() * 500) + 100}g - ${['Premium', 'Standard', 'Economy'][Math.floor(Math.random() * 3)]} Quality`,
+                    premises: `Premises ${Math.floor(Math.random() * 20) + 1}, ${districts[Math.floor(Math.random() * districts.length)]}`,
+                    sampleDrawnDate: sampleDrawnDate.toISOString().split('T')[0],
+                    district: districts[Math.floor(Math.random() * districts.length)],
+                    fsoName: fsoNames[Math.floor(Math.random() * fsoNames.length)],
+                    sampleType: sampleTypes[Math.floor(Math.random() * sampleTypes.length)],
+                    remarks: Math.random() > 0.7 ? 'Special handling required' : '',
+                    branded: isBranded ? 'Branded' : 'Non Branded',
+                    loosePrePacked: isPrePacked ? 'Pre-Packed' : 'Loose',
+                    personGivingSample: `Person ${Math.floor(Math.random() * 50) + 1}`,
+                    receivingDate: receivingDate.toISOString().split('T')[0],
+                    receivingTime: `${Math.floor(Math.random() * 12) + 1}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')} ${Math.random() > 0.5 ? 'PM' : 'AM'}`,
+                    manufacturingDate: manufacturingDate.toISOString().split('T')[0],
+                    expiryDate: expiryDate.toISOString().split('T')[0],
+                    batchNo: `B${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`,
+                    weight: `${Math.floor(Math.random() * 500) + 100}g`,
+                    ingredients: ['Ingredient A', 'Ingredient B', 'Ingredient C'].slice(0, Math.floor(Math.random() * 3) + 1).join(', '),
+                    manufacturingAddress: `Factory ${Math.floor(Math.random() * 10) + 1}, Industrial Area`,
+                    finalResults: finalResult,
+                    securityPaperNo: `SEC-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`,
+                    testsPerformed: ['Test 1', 'Test 2', 'Test 3'].slice(0, Math.floor(Math.random() * 3) + 1).join(', '),
+                    sentToDFL: Math.random() > 0.5 ? 'Yes' : 'No',
+                    microResults: finalResult === 'Pending' ? 'Pending' : ['Positive', 'Negative'][Math.floor(Math.random() * 2)],
+                    opinion: finalResult === 'Pass' ? 'Compliant' : finalResult === 'Fail' ? 'Non-compliant' : 'Under review',
+                    failureCategory: finalResult === 'Fail' ? failureCategories[Math.floor(Math.random() * failureCategories.length)] : '',
+                    dateOfIssuance: finalResult !== 'Pending' ? new Date(receivingDate).toISOString().split('T')[0] : '',
+                    reportGenerated: finalResult !== 'Pending' ? 'Yes' : 'No',
+                    reportDispatched: finalResult !== 'Pending' && Math.random() > 0.2 ? 'Yes' : 'No'
+                });
+            }
+            filteredSamples = [...samples];
+        }
+
+        // Initialize the application
+        function init() {
+            generateSampleData();
+            populateFilters();
+            populateAdminForms();
+            updateDashboard();
+            updateSummaryCards();
+            renderTable();
+            updateAdminLists();
+        }
+
+        // Populate filter dropdowns
+        function populateFilters() {
+            const districtFilter = document.getElementById('filter-district');
+            const categoryFilter = document.getElementById('filter-category');
+            
+            // Clear existing options
+            districtFilter.innerHTML = '<option value="">All Districts</option>';
+            categoryFilter.innerHTML = '<option value="">All Categories</option>';
+            
+            districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district;
+                option.textContent = district;
+                districtFilter.appendChild(option);
             });
             
-            // Show report and print button
-            document.getElementById('reportContainer').style.display = 'block';
-            document.getElementById('printReport').style.display = 'inline-block';
-        });
-        
-        document.getElementById('printReport').addEventListener('click', function() {
-            window.print();
-        });
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Populate admin form dropdowns
+        function populateAdminForms() {
+            const sampleCategory = document.getElementById('sample-category');
+            const sampleDistrict = document.getElementById('sample-district');
+            
+            // Clear existing options
+            sampleCategory.innerHTML = '<option value="">Select Category</option>';
+            sampleDistrict.innerHTML = '<option value="">Select District</option>';
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                sampleCategory.appendChild(option);
+            });
+            
+            districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district;
+                option.textContent = district;
+                sampleDistrict.appendChild(option);
+            });
+        }
+
+        // Update dashboard statistics
+        function updateDashboard() {
+            const totalSamples = samples.length;
+            const pendingTests = samples.filter(s => s.finalResults === 'Pending').length;
+            const completedTests = samples.filter(s => s.finalResults !== 'Pending').length;
+            const failureRate = totalSamples > 0 ? 
+                ((samples.filter(s => s.finalResults === 'Fail').length / totalSamples) * 100).toFixed(1) : 0;
+            
+            document.getElementById('total-samples').textContent = totalSamples;
+            document.getElementById('pending-tests').textContent = pendingTests;
+            document.getElementById('completed-tests').textContent = completedTests;
+            document.getElementById('failure-rate').textContent = failureRate + '%';
+        }
+
+        // Update summary cards
+        function updateSummaryCards() {
+            // Top Categories
+            const categoryCount = {};
+            samples.forEach(s => {
+                categoryCount[s.category] = (categoryCount[s.category] || 0) + 1;
+            });
+            const topCategories = Object.entries(categoryCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const categoriesList = document.getElementById('top-categories');
+            categoriesList.innerHTML = topCategories.map(([category, count]) => `
+                <li>
+                    <span class="summary-label">${category}</span>
+                    <span class="summary-value">${count}</span>
+                </li>
+            `).join('');
+
+            // District Distribution
+            const districtCount = {};
+            samples.forEach(s => {
+                districtCount[s.district] = (districtCount[s.district] || 0) + 1;
+            });
+            const topDistricts = Object.entries(districtCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const districtsList = document.getElementById('district-distribution');
+            districtsList.innerHTML = topDistricts.map(([district, count]) => `
+                <li>
+                    <span class="summary-label">${district}</span>
+                    <span class="summary-value">${count}</span>
+                </li>
+            `).join('');
+
+            // Recent Activity
+            const recentSamples = samples
+                .sort((a, b) => new Date(b.sampleDrawnDate) - new Date(a.sampleDrawnDate))
+                .slice(0, 5);
+            
+            const activityList = document.getElementById('recent-activity');
+            activityList.innerHTML = recentSamples.map(sample => `
+                <li>
+                    <span class="summary-label">${sample.sampleId}</span>
+                    <span class="summary-value">${sample.sampleDrawnDate}</span>
+                </li>
+            `).join('');
+        }
+
+        // Update admin lists
+        function updateAdminLists() {
+            // Update districts list
+            const districtsList = document.getElementById('districts-list');
+            districtsList.innerHTML = districts.map((district, index) => `
+                <li>
+                    <span>${district}</span>
+                    <div class="item-actions">
+                        <button class="btn-icon" onclick="deleteDistrict('${district}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </li>
+            `).join('');
+            document.getElementById('district-count').textContent = `${districts.length} districts`;
+
+            // Update categories list
+            const categoriesList = document.getElementById('categories-list');
+            categoriesList.innerHTML = categories.map((category, index) => `
+                <li>
+                    <span>${category}</span>
+                    <div class="item-actions">
+                        <button class="btn-icon" onclick="deleteCategory('${category}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </li>
+            `).join('');
+            document.getElementById('category-count').textContent = `${categories.length} categories`;
+        }
+
+        // Switch between tabs
+        function switchTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.nav-tabs li').forEach(li => li.classList.remove('active'));
+            event.target.closest('li').classList.add('active');
+            
+            // Hide all views
+            document.querySelectorAll('.view').forEach(view => view.style.display = 'none');
+            
+            // Show selected view
+            document.getElementById(`${tab}-view`).style.display = 'block';
+        }
+
+        // Add new sample
+        function addSample(event) {
+            event.preventDefault();
+            
+            const newSample = {
+                sr: samples.length + 1,
+                sampleId: `SMP-${String(samples.length + 1).padStart(5, '0')}`,
+                article: document.getElementById('sample-article').value,
+                category: document.getElementById('sample-category').value,
+                weightDescription: document.getElementById('sample-weight-description').value,
+                premises: document.getElementById('sample-premises').value,
+                sampleDrawnDate: document.getElementById('sample-drawn-date').value,
+                district: document.getElementById('sample-district').value,
+                fsoName: document.getElementById('sample-fso').value,
+                sampleType: document.getElementById('sample-sample-type').value,
+                remarks: document.getElementById('sample-remarks').value,
+                branded: document.getElementById('sample-branded').value,
+                loosePrePacked: document.getElementById('sample-packaging').value,
+                personGivingSample: document.getElementById('sample-person').value,
+                receivingDate: document.getElementById('sample-receiving-date').value,
+                receivingTime: document.getElementById('sample-receiving-time').value,
+                manufacturingDate: document.getElementById('sample-manufacturing-date').value || '',
+                expiryDate: document.getElementById('sample-expiry-date').value || '',
+                batchNo: document.getElementById('sample-batch').value || '',
+                weight: document.getElementById('sample-weight').value || '',
+                ingredients: document.getElementById('sample-ingredients').value || '',
+                manufacturingAddress: document.getElementById('sample-manufacturing-address').value || '',
+                finalResults: document.getElementById('sample-final-results').value,
+                securityPaperNo: document.getElementById('sample-security-paper').value || `SEC-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`,
+                testsPerformed: document.getElementById('sample-tests-performed').value,
+                sentToDFL: document.getElementById('sample-sent-dfl').value,
+                microResults: document.getElementById('sample-micro-results').value,
+                opinion: document.getElementById('sample-opinion').value,
+                failureCategory: document.getElementById('sample-failure-category').value || '',
+                dateOfIssuance: document.getElementById('sample-issuance-date').value || '',
+                reportGenerated: document.getElementById('sample-report-generated').value,
+                reportDispatched: document.getElementById('sample-report-dispatched').value
+            };
+            
+            samples.push(newSample);
+            filteredSamples = [...samples];
+            
+            // Reset form
+            document.getElementById('add-sample-form').reset();
+            
+            // Update UI
+            updateDashboard();
+            updateSummaryCards();
+            renderTable();
+            populateFilters();
+            
+            showToast('Sample added successfully!', 'success');
+        }
+
+        // Add new district
+        function addDistrict(event) {
+            event.preventDefault();
+            
+            const districtName = document.getElementById('district-name').value.trim();
+            
+            if (districts.includes(districtName)) {
+                showToast('District already exists!', 'error');
+                return;
+            }
+            
+            districts.push(districtName);
+            
+            // Reset form
+            document.getElementById('add-district-form').reset();
+            
+            // Update UI
+            populateFilters();
+            populateAdminForms();
+            updateAdminLists();
+            
+            showToast('District added successfully!', 'success');
+        }
+
+        // Add new category
+        function addCategory(event) {
+            event.preventDefault();
+            
+            const categoryName = document.getElementById('category-name').value.trim();
+            
+            if (categories.includes(categoryName)) {
+                showToast('Category already exists!', 'error');
+                return;
+            }
+            
+            categories.push(categoryName);
+            
+            // Reset form
+            document.getElementById('add-category-form').reset();
+            
+            // Update UI
+            populateFilters();
+            populateAdminForms();
+            updateAdminLists();
+            
+            showToast('Category added successfully!', 'success');
+        }
+
+        // Delete district
+        function deleteDistrict(districtName) {
+            if (confirm(`Are you sure you want to delete "${districtName}"?`)) {
+                const index = districts.indexOf(districtName);
+                if (index > -1) {
+                    districts.splice(index, 1);
+                    populateFilters();
+                    populateAdminForms();
+                    updateAdminLists();
+                    showToast('District deleted successfully!', 'success');
+                }
+            }
+        }
+
+        // Delete category
+        function deleteCategory(categoryName) {
+            if (confirm(`Are you sure you want to delete "${categoryName}"?`)) {
+                const index = categories.indexOf(categoryName);
+                if (index > -1) {
+                    categories.splice(index, 1);
+                    populateFilters();
+                    populateAdminForms();
+                    updateAdminLists();
+                    showToast('Category deleted successfully!', 'success');
+                }
+            }
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const district = document.getElementById('filter-district').value;
+            const category = document.getElementById('filter-category').value;
+            const branded = document.getElementById('filter-branded').value;
+            const type = document.getElementById('filter-type').value;
+            const dateFrom = document.getElementById('filter-date-from').value;
+            const dateTo = document.getElementById('filter-date-to').value;
+            
+            filteredSamples = samples.filter(sample => {
+                if (district && sample.district !== district) return false;
+                if (category && sample.category !== category) return false;
+                if (branded && sample.branded !== branded) return false;
+                if (type && sample.loosePrePacked !== type) return false;
+                if (dateFrom && sample.sampleDrawnDate < dateFrom) return false;
+                if (dateTo && sample.sampleDrawnDate > dateTo) return false;
+                return true;
+            });
+            
+            currentPage = 1;
+            renderTable();
+            showToast('Filters applied successfully', 'success');
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('filter-district').value = '';
+            document.getElementById('filter-category').value = '';
+            document.getElementById('filter-branded').value = '';
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-date-from').value = '';
+            document.getElementById('filter-date-to').value = '';
+            
+            filteredSamples = [...samples];
+            currentPage = 1;
+            renderTable();
+            showToast('Filters reset', 'info');
+        }
+
+        // Search samples
+        function searchSamples() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                applyFilters();
+                return;
+            }
+            
+            filteredSamples = samples.filter(sample => {
+                return Object.values(sample).some(value => 
+                    value && value.toString().toLowerCase().includes(searchTerm)
+                );
+            });
+            
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Sort table
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
+            }
+            
+            const columns = ['sr', 'sampleId', 'article', 'category', 'weightDescription', 'premises', 
+                           'sampleDrawnDate', 'district', 'fsoName', 'sampleType', 'branded', 
+                           'loosePrePacked', 'receivingDate', 'finalResults'];
+            
+            const sortKey = columns[column];
+            
+            filteredSamples.sort((a, b) => {
+                let aVal = a[sortKey];
+                let bVal = b[sortKey];
+                
+                if (sortKey.includes('Date')) {
+                    aVal = new Date(aVal);
+                    bVal = new Date(bVal);
+                }
+                
+                if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            renderTable();
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('samples-tbody');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageSamples = filteredSamples.slice(startIndex, endIndex);
+            
+            tbody.innerHTML = pageSamples.map(sample => `
+                <tr onclick="showSampleDetails(${sample.sr})">
+                    <td>${sample.sr}</td>
+                    <td>${sample.sampleId}</td>
+                    <td>${sample.article}</td>
+                    <td>${sample.category}</td>
+                    <td>${sample.weightDescription}</td>
+                    <td>${sample.premises}</td>
+                    <td>${sample.sampleDrawnDate}</td>
+                    <td>${sample.district}</td>
+                    <td>${sample.fsoName}</td>
+                    <td>${sample.sampleType}</td>
+                    <td>${sample.branded}</td>
+                    <td>${sample.loosePrePacked}</td>
+                    <td>${sample.receivingDate}</td>
+                    <td>
+                        <span class="status-badge ${sample.finalResults === 'Pass' ? 'success' : sample.finalResults === 'Fail' ? 'danger' : 'warning'}">
+                            ${sample.finalResults}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline" onclick="event.stopPropagation(); showSampleDetails(${sample.sr})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            updatePagination();
+        }
+
+        // Update pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredSamples.length / itemsPerPage);
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, filteredSamples.length);
+            
+            document.getElementById('pagination-info').textContent = 
+                `Showing ${startItem}-${endItem} of ${filteredSamples.length} entries`;
+            
+            const controls = document.getElementById('pagination-controls');
+            controls.innerHTML = '';
+            
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            };
+            controls.appendChild(prevBtn);
+            
+            // Page numbers
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = i === currentPage ? 'active' : '';
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                controls.appendChild(pageBtn);
+            }
+            
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            };
+            controls.appendChild(nextBtn);
+        }
+
+        // Show sample details
+        function showSampleDetails(sr) {
+            const sample = samples.find(s => s.sr === sr);
+            if (!sample) return;
+            
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Sample ID</div>
+                        <div class="detail-value">${sample.sampleId}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Article</div>
+                        <div class="detail-value">${sample.article}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Category</div>
+                        <div class="detail-value">${sample.category}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Weight & Description</div>
+                        <div class="detail-value">${sample.weightDescription}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Premises</div>
+                        <div class="detail-value">${sample.premises}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Sample Drawn Date</div>
+                        <div class="detail-value">${sample.sampleDrawnDate}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">District</div>
+                        <div class="detail-value">${sample.district}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">FSO/AFSO Name</div>
+                        <div class="detail-value">${sample.fsoName}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Sample Type</div>
+                        <div class="detail-value">${sample.sampleType}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Remarks</div>
+                        <div class="detail-value">${sample.remarks || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Branded/Non-Branded</div>
+                        <div class="detail-value">${sample.branded}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Loose/Pre-Packed</div>
+                        <div class="detail-value">${sample.loosePrePacked}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Person Giving Sample</div>
+                        <div class="detail-value">${sample.personGivingSample}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Receiving Date</div>
+                        <div class="detail-value">${sample.receivingDate}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Receiving Time</div>
+                        <div class="detail-value">${sample.receivingTime}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Manufacturing Date</div>
+                        <div class="detail-value">${sample.manufacturingDate || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Expiry Date</div>
+                        <div class="detail-value">${sample.expiryDate || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Batch No.</div>
+                        <div class="detail-value">${sample.batchNo || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Weight</div>
+                        <div class="detail-value">${sample.weight || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Ingredients</div>
+                        <div class="detail-value">${sample.ingredients || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Manufacturing Address</div>
+                        <div class="detail-value">${sample.manufacturingAddress || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Final Results</div>
+                        <div class="detail-value">
+                            <span class="status-badge ${sample.finalResults === 'Pass' ? 'success' : sample.finalResults === 'Fail' ? 'danger' : 'warning'}">
+                                ${sample.finalResults}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Security Paper No.</div>
+                        <div class="detail-value">${sample.securityPaperNo}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Tests Performed</div>
+                        <div class="detail-value">${sample.testsPerformed}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Sent to DFL for Micro</div>
+                        <div class="detail-value">${sample.sentToDFL}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Micro Results</div>
+                        <div class="detail-value">${sample.microResults}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Opinion</div>
+                        <div class="detail-value">${sample.opinion}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Failure Category</div>
+                        <div class="detail-value">${sample.failureCategory || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Date of Issuance</div>
+                        <div class="detail-value">${sample.dateOfIssuance || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Report Generated</div>
+                        <div class="detail-value">${sample.reportGenerated}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Report Dispatched to DFL</div>
+                        <div class="detail-value">${sample.reportDispatched}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('sample-modal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('sample-modal').classList.remove('active');
+        }
+
+        // Export data
+        function exportData() {
+            showToast('Exporting data...', 'info');
+            setTimeout(() => {
+                showToast('Data exported successfully!', 'success');
+            }, 1500);
+        }
+
+        // Export filtered data
+        function exportFilteredData() {
+            showToast('Exporting filtered data...', 'info');
+            setTimeout(() => {
+                showToast('Filtered data exported successfully!', 'success');
+            }, 1500);
+        }
+
+        // Generate report
+        function generateReport() {
+            const reportType = document.getElementById('report-type').value;
+            const reportRange = document.getElementById('report-range').value;
+            const reportFormat = document.getElementById('report-format').value;
+            
+            showToast(`Generating ${reportType} report for ${reportRange} in ${reportFormat.toUpperCase()} format...`, 'info');
+            setTimeout(() => {
+                showToast('Report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('.toast-icon');
+            const messageEl = toast.querySelector('.toast-message');
+            
+            toast.className = `toast ${type}`;
+            messageEl.textContent = message;
+            
+            if (type === 'success') {
+                icon.className = 'toast-icon fas fa-check-circle';
+            } else if (type === 'error') {
+                icon.className = 'toast-icon fas fa-exclamation-circle';
+            } else {
+                icon.className = 'toast-icon fas fa-info-circle';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('sample-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
